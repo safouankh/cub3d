@@ -1,0 +1,101 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: imatouil <imatouil@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/16 17:54:12 by imatouil          #+#    #+#             */
+/*   Updated: 2025/11/06 21:18:47 by imatouil         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/cub3d.h"
+
+static void	alloc_cub_structs_helper(t_cub *cub)
+{
+	cub->ceiling = malloc(sizeof(t_color));
+	if (!cub->ceiling)
+		error(cub, "Memory allocation failed");
+	cub->floor = malloc(sizeof(t_color));
+	if (!cub->floor)
+		error(cub, "Memory allocation failed");
+	cub->player = malloc(sizeof(t_player));
+	if (!cub->player)
+		error(cub, "Memory allocation failed");
+	cub->map = malloc(sizeof(t_map));
+	if (!cub->map)
+		error(cub, "Memory allocation failed");
+	cub->map->grid = NULL;
+	cub->map->width = 0;
+	cub->map->height = 0;
+}
+
+void	init_cub(t_cub *cub)
+{
+	cub->texture_no = NULL;
+	cub->texture_so = NULL;
+	cub->texture_we = NULL;
+	cub->texture_ea = NULL;
+	cub->ceiling = NULL;
+	cub->floor = NULL;
+	cub->map = NULL;
+	cub->player = NULL;
+	cub->has_no = 0;
+	cub->has_so = 0;
+	cub->has_we = 0;
+	cub->has_ea = 0;
+	cub->ceiling_set = 0;
+	cub->floor_set = 0;
+	cub->screen_height = WIN_H;
+	cub->screen_width = WIN_W;
+	cub->g_img = NULL;
+	alloc_cub_structs_helper(cub);
+}
+
+// void	print_map(t_map *map)
+// {
+// 	int	i;
+
+// 	i = -1;
+// 	while (map->grid[++i])
+// 		printf("%s\n", map->grid[i]);
+// }
+
+void	ll(void)
+{
+	system("leaks -q cub3d");
+}
+
+int	main(int ac, char **av)
+{
+	mlx_t	*mlx;
+	t_cub	*cub;
+
+	atexit(ll);
+	if (ac != 2)
+		return (printf("%sError\nEnter One Arg!\n", RED), 1);
+	else if ((ft_strlen(av[1]) <= 4)
+		|| (ft_strncmp(".cub", av[1] + ft_strlen(av[1]) - 4, 4)))
+		return (printf("%sError\nEnter .cub file extension\n", RED), 1);
+	cub = malloc(sizeof(t_cub));
+	if (!cub)
+		return (perror("Cub3D"), 1);
+	init_cub(cub);
+	if (parser(cub, av[1]))
+		return (0);
+	// print_map(cub->map);
+	mlx = mlx_init(cub->screen_width, cub->screen_height, "Cub3D", 1);
+	if (!mlx)
+		return (clean_up(cub), perror("MLX42 Init"), 1);
+	cub->g_img = mlx_new_image(mlx, cub->screen_width, cub->screen_height);
+	if (!cub->g_img)
+		return (clean_up(cub), perror("MLX42 Image"), 1);
+	draw_map(cub);
+	mlx_image_to_window(mlx, cub->g_img, 0, 0);
+	mlx_close_hook(mlx, close_window, cub);
+	mlx_key_hook(mlx, handel_key, cub);
+	mlx_loop(mlx);
+	clean_up(cub);
+	return (0);
+}

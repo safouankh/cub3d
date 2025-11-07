@@ -1,0 +1,49 @@
+
+
+==>>  handel key as switch\  <<==
+==>>  Make sure about .cub\  <<==
+==>>  Make sure about resolution max values\  <<==
+==>>  Make sure about space after textures file name\  <<==
+==>>  Make sure about .xpm textures file end\  <<==
+==>>  Fix leaks Fix leaks \  <<==
+==>>  Fix leaks Fix leaks \  <<==
+==>>  Fix leaks Fix leaks \  <<==
+==>>  Check leaks Fix leaks \  <<==
+==>>  Check leaks Fix leaks \  <<==
+==>>  🛑Check leaks Fix leaks🛑 \  <<==
+==>>  🛑Empty lines f maps🛑 \  <<==
+
+
+
+
+
+
+--------------------------
+Step 4: Parse the header
+--------------------------
+
+Go line by line.
+
+Detect resolution (R), textures (NO, SO, WE, EA), and colors (F, C).
+
+Store values in your t_cub struct.
+
+Skip empty lines.
+
+--------------------------
+Step 5: Parse the mapw
+--------------------------
+
+Detect first map line using is_map_line().
+
+Store all subsequent map lines in t_map.grid.
+
+Compute width and height.
+
+Detect the player position (N, S, E, W) and save in t_player.
+
+Pad shorter lines with spaces.
+
+Validate that map contains exactly one player.
+
+After parsing, you can validate map walls (optional next step).
