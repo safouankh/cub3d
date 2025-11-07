@@ -27,6 +27,8 @@
 # define RED "\e[31m"
 # define RESET "\e[0m"
 
+# define MOVE_SPEED 0.1
+
 typedef struct s_cub
 {
 	int				screen_width;

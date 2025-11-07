@@ -28,4 +28,13 @@ void	handel_key(mlx_key_data_t key, void *param)
 	cub = (t_cub *)param;
 	if (key.key == MLX_KEY_ESCAPE)
 		close_window(cub);
+	if (key.key == MLX_KEY_W)
+		cub->player->y -= MOVE_SPEED;
+	if (key.key == MLX_KEY_S)
+		cub->player->y += MOVE_SPEED;
+	if (key.key == MLX_KEY_A)
+		cub->player->x -= MOVE_SPEED;
+	if (key.key == MLX_KEY_D)
+		cub->player->x += MOVE_SPEED;
+	draw_map(cub);
 }
